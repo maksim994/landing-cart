@@ -1,46 +1,28 @@
-<form class="smart-basket__form" method="POST" id="smart-basket__form" enctype="multipart/form-data">
-    <div class="smart-basket__product-item">
-        <div class="smart-basket__product-name">Товар</div>
-        <div class="smart-basket__product-id">ID</div>
-        <div class="smart-basket__product-price">Цена / ₽</div>
-        <div class="smart-basket__product-quantity smart-basket__product-quantity_header">Кол-во</div>
-        <div class="smart-basket__product-price-common">Общая цена / ₽</div>
-        <div class="smart-basket__product-delete">Удалить</div>
+<form class="s-basket__form" method="POST" id="s-basket__form" enctype="multipart/form-data">
+    <div class="s-basket__product-item">
+        <div class="s-basket__product-name">Наивменование</div>
+        <div class="s-basket__product-price">Цена</div>
+        <div class="s-basket__product-quantity smart-basket__product-quantity_header">Кол-во</div>
+        <div class="s-basket__product-price-common">Сумма</div>
+        <div class="s-basket__product-delete">Удалить</div>
     </div>
 
-    <div class="smart-basket__product-item">
-        <div class="smart-basket__product-name">
-            <img src="https://smartlanding.biz/smartbasket/demo/img/pizza.png" width="60">
-            <span>Пицца «Ветчина и грибы»
-                <span class="smart-basket__product-size"> Размер: 32</span>
-            </span>
-            <input class="smart-basket__input" type="hidden" name="0032pz[productImg]" value="https://smartlanding.biz/smartbasket/demo/img/pizza.png">
-            <input class="smart-basket__input" type="hidden" name="0032pz[productName]" value="Пицца «Ветчина и грибы»">
-            <input class="smart-basket__input" type="hidden" name="0032pz[productSize]" value="32">
+    <div class="s-basket__product-item" data-id="${element.productSku}">
+        <div class="s-basket__product-name">${element.name}</div>
+        <div class="s-basket__product-price">${element.mv_price}</div>
+        <div class="s-basket__product-quantity">
+            <button class="btn btn_cart-minus">-</button>
+            <input type="text" class="input__cart-count" value="${element.count}">
+            <button class="btn btn_cart-plus">+</button>
         </div>
-
-        <div class="smart-basket__product-id">
-            0032pz
-            <input class="smart-basket__input" type="hidden" value="0032pz"name="0032pz[productId]">
-        </div>
-        <div class="smart-basket__product-price">
-            320
-            <input class="smart-basket__input" type="hidden" name="0032pz[productPrice]" value="320">
-        </div>
-        <div class="smart-basket__product-quantity">
-            <button class="smart-basket__remove-item" data-sb-id="0032pz">-</button>
-            <input class="smart-basket__product-quantity-state" type="number" min="1" step="1" pattern="^[0-9]" data-sb-id="0032pz">
-            <button class="smart-basket__add-item" data-sb-id="0032pz">+</button>
-            <input class="smart-basket__input" type="hidden" name="0032pz[productQuantity]" value="1">
-        </div>
-
-        <div class="smart-basket__product-price-common">
-            <input class="smart-basket__input" name="0032pz[productPriceCommon]" style="background-image: url(&quot;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAABHklEQVQ4EaVTO26DQBD1ohQWaS2lg9JybZ+AK7hNwx2oIoVf4UPQ0Lj1FdKktevIpel8AKNUkDcWMxpgSaIEaTVv3sx7uztiTdu2s/98DywOw3Dued4Who/M2aIx5lZV1aEsy0+qiwHELyi+Ytl0PQ69SxAxkWIA4RMRTdNsKE59juMcuZd6xIAFeZ6fGCdJ8kY4y7KAuTRNGd7jyEBXsdOPE3a0QGPsniOnnYMO67LgSQN9T41F2QGrQRRFCwyzoIF2qyBuKKbcOgPXdVeY9rMWgNsjf9ccYesJhk3f5dYT1HX9gR0LLQR30TnjkUEcx2uIuS4RnI+aj6sJR0AM8AaumPaM/rRehyWhXqbFAA9kh3/8/NvHxAYGAsZ/il8IalkCLBfNVAAAAABJRU5ErkJggg==&quot;); background-repeat: no-repeat; background-attachment: scroll; background-size: 16px 18px; background-position: 98% 50%;">
-        </div>
-        <button class="smart-basket__product-delete" data-sb-product-delete="0032pz">
-            <span class="smart-basket__delete-icon">×</span>
+        <div class="s-basket__product-price-common">${totalPrice}</div>
+        <button class="s-basket__product-delete" data-sb-product-delete="0032pz">
+            <span class="s-basket__delete-icon">×</span>
         </button>
     </div>
+
+
+
     <div class="smart-basket__result-common">
         <div class="smart-basket__empty-title" style="display: none;">Корзина пуста. Вы не добавили ни одного товара</div>
         <div class="smart-basket__success-title" style="display: none;">Заказ принят. Ожидайте звонка</div>
@@ -52,21 +34,38 @@
     </div>
     
     <div class="smart-basket__user-form">
-        <div class="smart-basket__user-info">
-            <div class="smart-basket__input-wrapper"><input class="smart-basket__user-input" type="text"
-                    placeholder="Введите имя" name="userName" required="required"></div>
-            <div class="smart-basket__input-wrapper"><input class="smart-basket__user-input" type="tel"
-                    placeholder="Введите телефон" name="userTel" required="required" maxlength="16"></div>
-            <div class="smart-basket__input-wrapper"><input class="smart-basket__user-input" type="email"
-                    placeholder="Введите e-mail" name="userEmail"></div>
-            <div class="smart-basket__agreement-wrapper"><input type="checkbox" name="agreement"
-                    class="smart-basket__input-agreement" id="smart-basket__input-agreement" checked="checked"
-                    value="Я принимаю условия пользовательского соглашения"><label class="smart-basket__label-agreement"
-                    for="smart-basket__input-agreement"></label><a class="smart-basket__link-agreement"
-                    href="https://smartlanding.biz" target="_blank" rel="nofollow">Я принимаю условия пользовательского
-                    соглашения</a></div>
+        <div class="s-basket__user-info">
+            <div class="s-basket__input-wrapper">
+                <input class="s-basket__user-input" type="text" placeholder="Введите имя" name="userName" required="required">
+            </div>
+
+            <div class="s-basket__input-wrapper">
+                <input class="s-basket__user-input" type="tel" placeholder="Введите телефон" name="userTel" required="required" maxlength="16">
+            </div>
+
+            <div class="s-basket__input-wrapper">
+                <input class="s-basket__user-input" type="email" placeholder="Введите e-mail" name="userEmail">
+            </div>
+
+            <div class="s-basket__input-wrapper">
+                <textarea class="s-basket__user-input" name="userComment" id="" cols="30" rows="10" placeholder="Комментарий к заказу"></textarea>
+            </div>
+
+
+            <div class="s-basket__agreement-wrapper">
+                <input type="checkbox" name="agreement" class="s-basket__input-agreement" id="s-basket__input-agreement" checked="checked" value="Я принимаю условия пользовательского соглашения">
+                <label class="s-basket__label-agreement" for="s-basket__input-agreement"></label>
+                <a class="smart-basket__link-agreement" href="#" target="_blank" rel="nofollow">Я принимаю условия пользовательского соглашения</a>
+            </div>
+
+            <div class="s-basket__input-wrapper">
+                <input class="s-basket__user-input" name="userFile" type="file" accept="image/jpeg,image/png,image/gif">
+            </div>
+
         </div>
-        <div class="smart-basket__footer"><button class="smart-basket__close-form">Продолжить покупки</button><button
-                class="smart-basket__send-form" form="smart-basket__form" type="submit">Сделать заказ</button></div>
+        <div class="s-basket__footer">
+            <button class="s-basket__close-form">Продолжить покупки</button>
+            <button class="s-basket__send-form" form="s-basket__form" type="submit">Сделать заказ</button>
+        </div>
     </div>
 </form>

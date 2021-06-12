@@ -19,12 +19,14 @@ document.addEventListener("DOMContentLoaded", function(event) {
 
   const modal = new GraphModal();
   const modalClose = document.querySelector('.c-basket__alert-button_close');
+  const basketCloseForm = document.querySelector('.s-basket__close-form');
   const modalBy = document.querySelector('.c-basket__alert-button_by');
 
   const cartBtn = document.querySelector('.s-basket__min');
   const cartCountLabel = document.querySelector('.s-basket__min-count');
 
   const cartProductList = document.querySelector('.modal-product-list__cart');
+  const basketEmpty = document.querySelector('.s-basket__empty-title');
   let cart;
 
   function init() {
@@ -42,33 +44,27 @@ document.addEventListener("DOMContentLoaded", function(event) {
 
   function showMiniCart(){
     if (cart != null ) {
-    cartProductList.innerHTML = '';
-    //выведим элементы в мини корзине
-    let out = '<ul class="cart__list">';
-
-    cart.forEach(element => {
-      let totalPrice  = Number(element.mv_price) * Number(element.count);
-      out += `<li>
-          <div class="cart__item" data-id="${element.productSku}">
-              <div class="cart__name">${element.name}</div>
-              <div class="cart__price">${element.mv_price}</div>
-              <div class="cart__count">
-                <button class="btn btn_cart-minus">-</button>
-                <input type="text" class="input__cart-count" value="${element.count}">
-                <button class="btn btn_cart-plus">+</button>
-              </div>
-              <div class="cart__total-price">${totalPrice}</div>
-              <div class="cart__dell">х</div>
+      basketEmpty.style.display = "none";
+      cartProductList.innerHTML = '';
+      let out  = '';
+      cart.forEach(element => {
+        let totalPrice  = Number(element.mv_price) * Number(element.count);
+        out += `
+        <div class="s-basket__product-item" data-id="${element.productSku}">
+          <div class="s-basket__product-name">${element.name}</div>
+          <div class="s-basket__product-price">${element.mv_price}</div>
+          <div class="s-basket__product-quantity">
+            <button class="c-basket__remove-item">-</button>
+            <input class="c-basket__product-quantity-state" min="1" step="1" pattern="^[0-9]" value="${element.count}">
+            <button class="c-basket__add-item">+</button>
           </div>
-        </li>`;
-    });
-
-    out += '<ul>';
-
-    cartProductList.innerHTML = out;
-    // $('.btn_cart-plus').on('click', plusGoods);
-    } else {
-      cartProductList.innerHTML = "Корзина пуста";
+          <div class="s-basket__product-price-common">${totalPrice}</div>
+          <button class="s-basket__product-delete">
+            <span class="s-basket__delete-icon">×</span>
+          </button>
+        </div>`;
+      });
+      cartProductList.innerHTML = out;
     }
   }
 
@@ -134,23 +130,33 @@ document.addEventListener("DOMContentLoaded", function(event) {
     })
   });
 
-  let summ = 0;
+
+  function productPriceCommon(){
+    let summ = 0;
+    const totalValue = document.querySelector('.s-basket__total-cost');
+    const cartItem = document.querySelectorAll('.modal-product-list__cart .s-basket__product-item');
+    cartItem.forEach( cartItems => {
+      const totalPrice = cartItems.querySelector('.s-basket__product-price-common');
+      console.log(totalPrice);
+      summ += Number(totalPrice.textContent);
+    });
+    let sumFormat = summ.toLocaleString('ru-RU');
+    totalValue.value = sumFormat;
+  }
+
+
   function openCartModal(){
-    if ( document.querySelectorAll('.cart__item') ) {
-      const cartItem = document.querySelectorAll('.cart__item');
-      const totalValue = document.querySelector('.modal-total__cart span');
-      
+    if ( document.querySelectorAll('.modal-product-list__cart .s-basket__product-item') ) {
+      const cartItem = document.querySelectorAll('.modal-product-list__cart .s-basket__product-item');
+
       cartItem.forEach( cartItems => {
-        const btnAddItem = cartItems.querySelector('.btn_cart-plus'); // Кнопка плюс 
-        const btnRemoveItem = cartItems.querySelector('.btn_cart-minus');  // Кнопка минус
-        const quantity = cartItems.querySelector('.input__cart-count'); // Кол-во товара
-
-        const remove = cartItems.querySelector('.cart__dell'); // Кнопка удалить 
-
+        const btnAddItem = cartItems.querySelector('.c-basket__add-item'); // Кнопка плюс 
+        const btnRemoveItem = cartItems.querySelector('.c-basket__remove-item');  // Кнопка минус
+        const quantity = cartItems.querySelector('.c-basket__product-quantity-state'); // Кол-во товара
+        const remove = cartItems.querySelector('.s-basket__product-delete'); // Кнопка удалить 
         const productSku = cartItems.getAttribute("data-id"); //SKU
-
-        const totalPrice = cartItems.querySelector('.cart__total-price'); //Итоговая сумма за товар
-        const price = cartItems.querySelector('.cart__price'); //Цена
+        const totalPrice = cartItems.querySelector('.s-basket__product-price-common'); //Итоговая сумма за товар
+        const price = cartItems.querySelector('.s-basket__product-price'); //Цена
 
         btnAddItem.addEventListener('click', () => {
           quantity.value = Number(quantity.value) + 1;
@@ -159,14 +165,12 @@ document.addEventListener("DOMContentLoaded", function(event) {
             if (element.productSku == productSku){ element.count++;}
             totalPrice.innerHTML = ( Number(quantity.value) * Number(price.textContent) ) ;
           });
+          productPriceCommon();
           localStorage.setItem('cart-product', JSON.stringify(cart));
-          
         });
     
         btnRemoveItem.addEventListener('click', () => {
-
           quantity.value = Number(quantity.value) - 1;
-
           cart.forEach(element => {
             if (element.productSku == productSku){ element.count--;}
             totalPrice.innerHTML = Number(quantity.value) * Number(price.textContent);
@@ -175,33 +179,22 @@ document.addEventListener("DOMContentLoaded", function(event) {
           if (Number(quantity.value) < 1){
             quantity.value = 1
           }
-
-          localStorage.setItem('cart-product', JSON.stringify(cart));
-
-        
+          productPriceCommon();
+          localStorage.setItem('cart-product', JSON.stringify(cart));        
         });
 
         remove.addEventListener('click', () => {
-
           cart.forEach((element, key) => {
             if (element.productSku == productSku){
               cart.splice(key, 1);
             }
           });
-          
           cartItems.style.display = "none";
-          console.log(cart);
+          productPriceCommon();
           localStorage.setItem('cart-product', JSON.stringify(cart));
-
-
-          
         });
-
-        summ += Number(totalPrice.textContent);
-
       })
-      console.log(summ);
-      totalValue.innerHTML = summ;
+      productPriceCommon();
     }
   };
 
@@ -212,21 +205,20 @@ document.addEventListener("DOMContentLoaded", function(event) {
     modal.close();
   });
 
-  modalBy.addEventListener('click', () => {
+  basketCloseForm.addEventListener('click', () => {
+    modal.close();
+  });
 
+  modalBy.addEventListener('click', () => {
     showMiniCart();
     openCartModal();
-
     modal.close();
     modal.open('cart');
-    
   });
 
   cartBtn.addEventListener('click', () => {
     showMiniCart();
     openCartModal();
-
-
     modal.open('cart');
   });
 
@@ -235,8 +227,6 @@ document.addEventListener("DOMContentLoaded", function(event) {
 
   const orderForm = document.querySelector('#order');
   const orderBtn = document.querySelector('#send-order');
-
-
 
   orderForm.onsubmit = async (e) => {
     e.preventDefault();

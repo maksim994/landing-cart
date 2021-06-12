@@ -89,40 +89,60 @@ include 'config.php';
 		</div>
 
     <div class="modal__container" role="dialog" aria-modal="true" data-graph-target="cart">
-			<button class="btn-reset modal__close" aria-label="Закрыть модальное окно"></button>
 			<div class="modal-content">
 
-        <div class="modal-product-list__cart"></div>
-        <div class="modal-total__cart">Итого: <span></span> </div>
+      <div class="s-basket__product-item">
+        <div class="s-basket__product-name">Наивменование</div>
+        <div class="s-basket__product-price">Цена</div>
+        <div class="s-basket__product-quantity smart-basket__product-quantity_header">Кол-во</div>
+        <div class="s-basket__product-price-common">Сумма</div>
+        <div class="s-basket__product-delete">Удалить</div>
+      </div>
+
+      <div class="modal-product-list__cart"></div>
+
+      <div class="s-basket__result-common">
+        <div class="s-basket__empty-title">Корзина пуста. Вы не добавили ни одного товара</div>
+        <div class="s-basket__success-title" style="display: none;">Заказ принят. Ожидайте звонка</div>
+        <div class="s-basket__price-common">
+          <span>Общая стоимость: </span> 
+          <input name="finalPrice" class="s-basket__total-cost" type="text" value="0">
+        </div>
+      </div>
+      
+        <form action="" method="POST" id="s-basket__form">
+          <div class="s-basket__user-info">
+            <div class="s-basket__input-wrapper">
+              <input class="s-basket__user-input" type="text" placeholder="Введите имя" name="userName" required="required">
+            </div>
+
+            <div class="s-basket__input-wrapper">
+              <input class="s-basket__user-input" type="tel" placeholder="Введите телефон" name="userTel" required="required" maxlength="16">
+            </div>
+
+            <div class="s-basket__input-wrapper">
+              <input class="s-basket__user-input" type="email" placeholder="Введите e-mail" name="userEmail">
+            </div>
+
+            <div class="s-basket__input-wrapper s-basket__textarea-wrapper">
+              <textarea class="s-basket__user-input" name="userComment" id="" cols="30" rows="5" placeholder="Комментарий к заказу"></textarea>
+            </div>
+
+            <div class="s-basket__input-wrapper s-basket__file-wrapper">
+              <input class="s-basket__user-input" name="userFile" type="file" accept="image/jpeg,image/png,image/gif">
+            </div>
+
+            <div class="s-basket__agreement-wrapper">
+              <input type="checkbox" name="agreement" class="s-basket__input-agreement" id="s-basket__input-agreement" checked="checked" value="Я принимаю условия пользовательского соглашения">
+              <label class="s-basket__label-agreement" for="s-basket__input-agreement">Я принимаю условия <a class="smart-basket__link-agreement" href="#" target="_blank" rel="nofollow">пользовательского соглашения</a></label>
+            </div>
+          </div>
+          <div class="s-basket__footer">
+            <button class="s-basket__close-form">Продолжить покупки</button>
+            <button class="s-basket__send-form" form="s-basket__form" type="submit">Сделать заказ</button>
+          </div>
 
 
-        
-        <form action="" method="post" id="order">
-          <label for="name">
-            <div class="input__label">Имя</div>
-            <input name="name" id="name" type="text">
-          </label>
-          <label for="email">
-            <div class="input__label">Email</div>
-            <input name="email" id="email" type="email">
-          </label>
-          <label for="phone">
-            <div class="input__label">Телефон</div>
-            <input name="phone" id="phone" type="tel">
-          </label>
-          <label for="files">
-            <div class="input__label">Прикрепите документ</div>
-            <input name="files" id="files" type="file" accept="image/jpeg,image/png,image/gif">
-          </label>
-          <label for="comment">
-            <div class="input__label">Комментарий</div>
-            <textarea name="comment" id="comment" cols="30" rows="10"></textarea>
-          </label>
-          <input name="product" id="product" type="text">
-
-          <div class="smartlid__checkbox-wrapper"><input class="smartlid__checkbox smartlid__checkbox_agreement" type="checkbox" name="agreement" id="smartlid__checkbox_agreement" value="Принимаю"><label for="smartlid__checkbox_agreement" class="smartlid__label smartlid__label_agreement"><a class="agreement-link" href="#" target="_blank">Я <span class="toggle--on">принимаю</span><span class="toggle--off">не принимаю</span> условия пользовательского соглашения</a></label></div>
-
-          <button type="submite" id="send-order">Оформить заказ</button>
         </form>
       </div>
 		</div>
