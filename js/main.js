@@ -11,7 +11,6 @@ document.addEventListener("DOMContentLoaded", function(event) {
     date.forEach(e => {
       state.data.push(e);
     });
-    //state.data.push(JSON.parse(localStorage.getItem('cart-product')));
   }
 
 
@@ -220,10 +219,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
 
   init();
 
-
   const basketForm = document.querySelector('#s-basket__form');
-  const basketSendForm = document.querySelector('.s-basket__send-form');
-
   const basketError = document.querySelector('.s-basket__error-title');
   const basketSuccess = document.querySelector('.s-basket__success-title');
 
@@ -243,21 +239,17 @@ document.addEventListener("DOMContentLoaded", function(event) {
     if( result.success == false ){
       console.error('Упс. Произошла ошибка');
       basketError.style.display = 'block';
-    }else {
+    } else {
       const totalValue = document.querySelector('.s-basket__total-cost');
       localStorage.removeItem('cart-product');
       cartProductList.style.display = 'none';
       totalValue.value = 0;
       cartCountLabel.innerHTML = 0;
 
-
       basketError.style.display = 'none';
       basketSuccess.style.display = 'block';
     }
 
   };
-
-
-
 
 });
