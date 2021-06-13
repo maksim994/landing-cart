@@ -35,6 +35,11 @@ if (isset($_POST) && !empty($_POST)) {
   if ( !empty($userComment) ) { $body .= 'Комментарий к заказу: '.$userComment.'<br>'; }
   if ( !empty($productList) ) { $body .= $productList; }
 
+  if ($_FILES && $_FILES["filename"]["error"] == UPLOAD_ERR_OK){
+    $name = "/upload/" . $_FILES["filename"]["name"];
+    move_uploaded_file($_FILES["filename"]["tmp_name"], $name);
+  }
+
 
   $mail = new PHPMailer;
   $mail->CharSet = 'UTF-8';

@@ -6,8 +6,8 @@ document.addEventListener("DOMContentLoaded", function(event) {
     data: []
   }
 
-  let date  = JSON.parse(localStorage.getItem('cart-product'));  
   if (localStorage.getItem('cart-product') != null ){
+    let date = JSON.parse(localStorage.getItem('cart-product'));  
     date.forEach(e => {
       state.data.push(e);
     });
@@ -247,7 +247,13 @@ document.addEventListener("DOMContentLoaded", function(event) {
       console.error('Упс. Произошла ошибка');
       basketError.style.display = 'block';
     }else {
-      console.log('Отправили');
+      const totalValue = document.querySelector('.s-basket__total-cost');
+      localStorage.removeItem('cart-product');
+      cartProductList.style.display = 'none';
+      totalValue.value = 0;
+      cartCountLabel.innerHTML = 0;
+
+
       basketError.style.display = 'none';
       basketSuccess.style.display = 'block';
     }
