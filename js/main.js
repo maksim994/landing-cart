@@ -197,9 +197,6 @@ document.addEventListener("DOMContentLoaded", function(event) {
     }
   };
 
-
-
-
   modalClose.addEventListener('click', () => {
     modal.close();
   });
