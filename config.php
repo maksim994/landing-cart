@@ -1,5 +1,11 @@
 <?php 
 
+
+$url_site = $_SERVER['HTTP_HOST'];
+$admin_email = array(
+  'm.molkov@wbooster.ru',
+);
+
 $products = [
   array(
     'code' => 'code-1',

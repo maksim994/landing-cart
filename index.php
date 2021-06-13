@@ -104,6 +104,7 @@ include 'config.php';
       <div class="s-basket__result-common">
         <div class="s-basket__empty-title">Корзина пуста. Вы не добавили ни одного товара</div>
         <div class="s-basket__success-title" style="display: none;">Заказ принят. Ожидайте звонка</div>
+        <div class="s-basket__error-title" style="display: none;">При отправке заказа произошла ошибка, попробуйте позднее</div>
         <div class="s-basket__price-common">
           <span>Общая стоимость: </span> 
           <input name="finalPrice" class="s-basket__total-cost" type="text" value="0">
@@ -136,6 +137,8 @@ include 'config.php';
               <input type="checkbox" name="agreement" class="s-basket__input-agreement" id="s-basket__input-agreement" checked="checked" value="Я принимаю условия пользовательского соглашения">
               <label class="s-basket__label-agreement" for="s-basket__input-agreement">Я принимаю условия <a class="smart-basket__link-agreement" href="#" target="_blank" rel="nofollow">пользовательского соглашения</a></label>
             </div>
+
+            <input type="hidden" name="userProduct">
           </div>
           <div class="s-basket__footer">
             <button class="s-basket__close-form">Продолжить покупки</button>

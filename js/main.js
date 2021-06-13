@@ -137,7 +137,6 @@ document.addEventListener("DOMContentLoaded", function(event) {
     const cartItem = document.querySelectorAll('.modal-product-list__cart .s-basket__product-item');
     cartItem.forEach( cartItems => {
       const totalPrice = cartItems.querySelector('.s-basket__product-price-common');
-      console.log(totalPrice);
       summ += Number(totalPrice.textContent);
     });
     let sumFormat = summ.toLocaleString('ru-RU');
@@ -225,20 +224,34 @@ document.addEventListener("DOMContentLoaded", function(event) {
   init();
 
 
-  const orderForm = document.querySelector('#order');
-  const orderBtn = document.querySelector('#send-order');
+  const basketForm = document.querySelector('#s-basket__form');
+  const basketSendForm = document.querySelector('.s-basket__send-form');
 
-  orderForm.onsubmit = async (e) => {
+  const basketError = document.querySelector('.s-basket__error-title');
+  const basketSuccess = document.querySelector('.s-basket__success-title');
+
+  basketForm.onsubmit = async (e) => {
     e.preventDefault();
+
+    let userProduct = basketForm.elements.userProduct;
+    userProduct.value = localStorage.getItem('cart-product');
     
-    let response = await fetch('./send-cart.php', {
+    let response = await fetch('./inc/send-cart.php', {
       method: 'POST',
-      body: new FormData(orderForm)
+      body: new FormData(basketForm)
     });
 
-    // let result = await response.json();
+    let result = await response.json();
 
-    // alert(result.message);
+    if( result.success == false ){
+      console.error('Упс. Произошла ошибка');
+      basketError.style.display = 'block';
+    }else {
+      console.log('Отправили');
+      basketError.style.display = 'none';
+      basketSuccess.style.display = 'block';
+    }
+
   };
 
 
