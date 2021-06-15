@@ -2,6 +2,8 @@
 document.addEventListener("DOMContentLoaded", function(event) {
   'use strict';
 
+  window.dataLayer = window.dataLayer || [];
+
   let state = {
     data: []
   }
@@ -42,14 +44,14 @@ document.addEventListener("DOMContentLoaded", function(event) {
   }
 
   function showMiniCart(){
+    count();
     if (cart != null ) {
-      basketEmpty.style.display = "none";
       cartProductList.innerHTML = '';
       let out  = '';
       cart.forEach(element => {
         let totalPrice  = Number(element.mv_price) * Number(element.count);
         out += `
-        <div class="s-basket__product-item" data-id="${element.productSku}">
+        <div class="s-basket__product-item" data-id="${element.productSku}" data-name="${element.name}">
           <div class="s-basket__product-name">${element.name}</div>
           <div class="s-basket__product-price">${element.mv_price}</div>
           <div class="s-basket__product-quantity">
@@ -68,11 +70,12 @@ document.addEventListener("DOMContentLoaded", function(event) {
   }
 
   function count(){
-
-    if (localStorage.getItem('cart-product') != null ){
+    if (localStorage.getItem('cart-product') != null && cart.length != 0){
       cartCountLabel.innerHTML = cart.length;
+      basketEmpty.style.display = "none"; 
     } else {
       cartCountLabel.innerHTML = 0;
+      basketEmpty.style.display = "block";
     }
     
   }
@@ -112,6 +115,22 @@ document.addEventListener("DOMContentLoaded", function(event) {
       };
 
       state.data.push(obj);
+
+      //Электронная коммерция
+      let priceFormat = productPrice.toLocaleString('ru-RU');
+      window.dataLayer.push({ 
+        "ecommerce": { 
+          "add": { 
+            "products": [ { 
+              "id": productSku, 
+              "name": productName, 
+              "price": Number(priceFormat), 
+              "quantity": Number(quantity.value)
+            } ] 
+          } 
+        } 
+      });
+      //END Электронная коммерция
 
       const itemData = state.data.find( (item)=>item.productSku === productSku );
       const newObject = [Object.assign({}, itemData, {count: itemData.count+= Number(quantity.value) })];
@@ -153,6 +172,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
         const quantity = cartItems.querySelector('.c-basket__product-quantity-state'); // Кол-во товара
         const remove = cartItems.querySelector('.s-basket__product-delete'); // Кнопка удалить 
         const productSku = cartItems.getAttribute("data-id"); //SKU
+        const productName = cartItems.getAttribute("data-name"); //SKU
         const totalPrice = cartItems.querySelector('.s-basket__product-price-common'); //Итоговая сумма за товар
         const price = cartItems.querySelector('.s-basket__product-price'); //Цена
 
@@ -182,14 +202,37 @@ document.addEventListener("DOMContentLoaded", function(event) {
         });
 
         remove.addEventListener('click', () => {
+          
+          //Электронная коммерция
+          window.dataLayer.push({ 
+            "ecommerce": { 
+              "remove": { 
+                "products": [ { 
+                  "id": productSku,
+                  "name": productName
+                } ] 
+              } 
+            } 
+          });
+          //END Электронная коммерция
           cart.forEach((element, key) => {
             if (element.productSku == productSku){
               cart.splice(key, 1);
             }
           });
+
           cartItems.style.display = "none";
-          productPriceCommon();
           localStorage.setItem('cart-product', JSON.stringify(cart));
+          productPriceCommon();
+          count();
+
+          let arr = state.data;
+
+          arr.forEach((el, key) => {
+            if (el.productSku == productSku){
+              arr.splice(key, 1);
+            }
+          });
         });
       })
       productPriceCommon();
