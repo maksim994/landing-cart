@@ -53,15 +53,17 @@ document.addEventListener("DOMContentLoaded", function(event) {
         out += `
         <div class="s-basket__product-item" data-id="${element.productSku}" data-name="${element.name}">
           <div class="s-basket__product-name">${element.name}</div>
-          <div class="s-basket__product-price">${element.mv_price}</div>
+          <div class="s-basket__product-price"><span class="text">Ценаза шт.&nbsp;</span> <span class="number">${element.mv_price}</span> </div>
           <div class="s-basket__product-quantity">
             <button class="c-basket__remove-item">-</button>
             <input class="c-basket__product-quantity-state" min="1" step="1" pattern="^[0-9]" value="${element.count}">
             <button class="c-basket__add-item">+</button>
           </div>
-          <div class="s-basket__product-price-common">${totalPrice}</div>
+          <div class="s-basket__product-price-common"><span class="text">Общая сумма&nbsp;</span> <span class="number">${totalPrice}</span></div>
           <button class="s-basket__product-delete">
-            <span class="s-basket__delete-icon">×</span>
+            <svg width="20" height="20" fill="#A5A7AE">
+              <use xlink:href="./images/sprite.svg#delete"></use>
+            </svg>
           </button>
         </div>`;
       });
@@ -154,7 +156,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
     const totalValue = document.querySelector('.s-basket__total-cost');
     const cartItem = document.querySelectorAll('.modal-product-list__cart .s-basket__product-item');
     cartItem.forEach( cartItems => {
-      const totalPrice = cartItems.querySelector('.s-basket__product-price-common');
+      const totalPrice = cartItems.querySelector('.s-basket__product-price-common>.number');
       summ += Number(totalPrice.textContent);
     });
     let sumFormat = summ.toLocaleString('ru-RU');
@@ -173,8 +175,8 @@ document.addEventListener("DOMContentLoaded", function(event) {
         const remove = cartItems.querySelector('.s-basket__product-delete'); // Кнопка удалить 
         const productSku = cartItems.getAttribute("data-id"); //SKU
         const productName = cartItems.getAttribute("data-name"); //SKU
-        const totalPrice = cartItems.querySelector('.s-basket__product-price-common'); //Итоговая сумма за товар
-        const price = cartItems.querySelector('.s-basket__product-price'); //Цена
+        const totalPrice = cartItems.querySelector('.s-basket__product-price-common>.number'); //Итоговая сумма за товар
+        const price = cartItems.querySelector('.s-basket__product-price>.number'); //Цена
 
         btnAddItem.addEventListener('click', () => {
           quantity.value = Number(quantity.value) + 1;

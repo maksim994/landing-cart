@@ -109,12 +109,12 @@ include 'config.php';
     <div class="modal__container" role="dialog" aria-modal="true" data-graph-target="cart">
 			<div class="modal-content">
 
-      <div class="s-basket__product-item">
+      <div class="s-basket__product-item s-basket__product-title">
         <div class="s-basket__product-name">Наивменование</div>
         <div class="s-basket__product-price">Цена</div>
         <div class="s-basket__product-quantity smart-basket__product-quantity_header">Кол-во</div>
         <div class="s-basket__product-price-common">Сумма</div>
-        <div class="s-basket__product-delete">Удалить</div>
+        <div class="s-basket__product-delete"></div>
       </div>
 
       <div class="modal-product-list__cart"></div>
